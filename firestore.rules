@@ -1,0 +1,148 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ========================================================================
+    // HELPER FUNCTIONS & ROLE-BASED ACCESS CONTROL
+    // ========================================================================
+
+    // Check if request is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Check if user is operating on their own document
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Check if authenticated user has 'admin' role in /users collection
+    function isAdmin() {
+      return isAuthenticated() && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // ========================================================================
+    // USERS COLLECTION
+    // ========================================================================
+    match /users/{userId} {
+      // Anyone authenticated can read user profile; admins can list all users
+      allow read: if isAuthenticated();
+
+      // Users can only create their own profile during registration
+      allow create: if isOwner(userId) && 
+        request.resource.data.keys().hasAll(['name', 'email', 'role']) &&
+        (request.resource.data.role == 'student' || isAdmin());
+
+      // Users can update their own details; only admins can modify roles
+      allow update: if isOwner(userId) && 
+        (request.resource.data.role == resource.data.role || isAdmin());
+
+      // Only administrators can delete user accounts
+      allow delete: if isAdmin();
+    }
+
+    // ========================================================================
+    // BOOKS COLLECTION (CATALOG)
+    // ========================================================================
+    match /books/{bookId} {
+      // Catalog is publicly readable by all students and guests
+      allow read: if true;
+
+      // Only librarians/admins can create or delete books
+      allow create, delete: if isAdmin();
+
+      // Updates: Admins can update all fields. 
+      // Authenticated students can only update 'available' and 'borrowCount' within transactions.
+      allow update: if isAdmin() || (
+        isAuthenticated() && 
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['available', 'borrowCount']) &&
+        request.resource.data.available >= 0 &&
+        request.resource.data.available <= resource.data.quantity
+      );
+    }
+
+    // ========================================================================
+    // BORROWINGS COLLECTION
+    // ========================================================================
+    match /borrowings/{borrowingId} {
+      // Students can only read their own loans; Admins can view all loans
+      allow read: if isAdmin() || (isAuthenticated() && resource.data.userId == request.auth.uid);
+
+      // Students can issue books for themselves
+      allow create: if isAuthenticated() && 
+        request.resource.data.userId == request.auth.uid &&
+        request.resource.data.status == 'issued';
+
+      // Students can return their own books; Admins can update any borrowing record
+      allow update: if isAdmin() || (
+        isAuthenticated() && 
+        resource.data.userId == request.auth.uid &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'returnDate']) &&
+        request.resource.data.status == 'returned'
+      );
+
+      // Only admins can delete borrowing audit records
+      allow delete: if isAdmin();
+    }
+
+    // ========================================================================
+    // RESERVATIONS COLLECTION
+    // ========================================================================
+    match /reservations/{reservationId} {
+      // Students view their own reservations; Admins view all
+      allow read: if isAdmin() || (isAuthenticated() && resource.data.userId == request.auth.uid);
+
+      // Students can reserve out-of-stock titles for themselves
+      allow create: if isAuthenticated() && 
+        request.resource.data.userId == request.auth.uid &&
+        request.resource.data.status == 'active';
+
+      // Students can cancel their own reservation; Admins can fulfill or cancel
+      allow update: if isAdmin() || (
+        isAuthenticated() && 
+        resource.data.userId == request.auth.uid &&
+        request.resource.data.status in ['active', 'cancelled']
+      );
+
+      // Only admins can delete reservation records
+      allow delete: if isAdmin();
+    }
+
+    // ========================================================================
+    // FINES COLLECTION
+    // ========================================================================
+    match /fines/{fineId} {
+      // Students can only view their own fines; Admins can view all fines
+      allow read: if isAdmin() || (isAuthenticated() && resource.data.userId == request.auth.uid);
+
+      // System creates fine records upon late return
+      allow create: if isAuthenticated();
+
+      // Admins can mark fines as paid or waived; Students can pay their own fines
+      allow update: if isAdmin() || (
+        isAuthenticated() && 
+        resource.data.userId == request.auth.uid &&
+        request.resource.data.status == 'paid'
+      );
+
+      // Only admins can delete fine records
+      allow delete: if isAdmin();
+    }
+
+    // ========================================================================
+    // NOTIFICATIONS COLLECTION
+    // ========================================================================
+    match /notifications/{notifId} {
+      // Users can read and acknowledge their own notifications
+      allow read, update: if isAuthenticated() && resource.data.userId == request.auth.uid;
+
+      // Authenticated users and system can send notifications
+      allow create: if isAuthenticated();
+
+      // Users can delete their own notifications; Admins can purge
+      allow delete: if isAdmin() || (isAuthenticated() && resource.data.userId == request.auth.uid);
+    }
+  }
+}

@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Portal | Smart Library Management System</title>
+  
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Core & Dashboard Stylesheets -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <!-- ==================== SIDEBAR ==================== -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <a href="../index.html" class="sidebar-brand">
+          <div class="sidebar-brand-icon">
+            <i class="fas fa-book-reader"></i>
+          </div>
+          <span>Smart<span style="color: var(--primary);">Lib</span></span>
+        </a>
+        <span class="sidebar-role-badge">Student</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Catalog & Discovery</div>
+        <a href="#catalog" class="sidebar-link active" data-view="catalog">
+          <i class="fas fa-th-large"></i>
+          <span>Library Catalog</span>
+        </a>
+        <a href="#recommendations" class="sidebar-link" data-view="recommendations">
+          <i class="fas fa-brain" style="color: var(--accent-purple);"></i>
+          <span>AI Recommendations</span>
+          <span class="badge badge-purple" style="font-size: 0.68rem; margin-left: auto;">Smart</span>
+        </a>
+
+        <div class="nav-section-title">My Circulation</div>
+        <a href="#my-books" class="sidebar-link" data-view="my-books">
+          <i class="fas fa-book"></i>
+          <span>Borrowed Books</span>
+          <span class="badge-counter" id="sidebar-loans-count">0</span>
+        </a>
+        <a href="#reservations" class="sidebar-link" data-view="reservations">
+          <i class="fas fa-bookmark"></i>
+          <span>My Reservations</span>
+          <span class="badge-counter" id="sidebar-reserves-count">0</span>
+        </a>
+        <a href="#fines" class="sidebar-link" data-view="fines">
+          <i class="fas fa-receipt"></i>
+          <span>My Fines</span>
+          <span class="badge-counter" id="sidebar-fines-badge">$0</span>
+        </a>
+
+        <div class="nav-section-title">Account</div>
+        <a href="#profile" class="sidebar-link" data-view="profile">
+          <i class="fas fa-user-circle"></i>
+          <span>Student Profile</span>
+        </a>
+        <a href="../index.html" class="sidebar-link">
+          <i class="fas fa-home"></i>
+          <span>Library Landing</span>
+        </a>
+      </nav>
+
+      <!-- Sidebar User Meta Footer -->
+      <div class="sidebar-footer">
+        <div class="user-avatar-small student-avatar-display">AM</div>
+        <div class="user-meta-sidebar">
+          <div class="name student-name-display">Alex Mercer</div>
+          <div class="role student-id-display">STU-2026-049</div>
+        </div>
+        <button class="sidebar-logout-btn" id="sidebar-logout-btn" title="Sign Out">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- ==================== MAIN CONTENT AREA ==================== -->
+    <main class="app-main">
+      <!-- Top Application Bar -->
+      <header class="app-topbar">
+        <div class="topbar-left">
+          <button class="mobile-sidebar-toggle" id="mobile-sidebar-toggle">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h1 class="page-heading-title" id="page-title">Student Portal</h1>
+        </div>
+
+        <div class="topbar-right">
+          <!-- Notification Bell Menu -->
+          <div class="notification-menu-wrapper">
+            <button class="notification-bell-btn" id="notification-bell-btn" aria-label="Notifications">
+              <i class="fas fa-bell"></i>
+              <span class="notification-badge" id="notification-badge-count" style="display: none;">0</span>
+            </button>
+
+            <!-- Notifications Dropdown -->
+            <div class="notification-dropdown" id="notification-dropdown">
+              <div class="notification-header">
+                <span style="font-weight: 700; font-size: 0.9rem; color: var(--slate-900);">Notifications</span>
+                <button class="btn btn-secondary btn-sm" id="mark-all-read-btn" style="padding: 0.2rem 0.5rem; font-size: 0.72rem;">Mark all read</button>
+              </div>
+              <ul class="notification-list" id="notification-items-list">
+                <!-- Injected via JS -->
+              </ul>
+            </div>
+          </div>
+
+          <!-- User Quick Pill -->
+          <div style="display: flex; align-items: center; gap: 0.65rem; background: var(--slate-100); padding: 0.35rem 0.75rem; border-radius: var(--radius-full); border: 1px solid var(--slate-200);">
+            <div class="user-avatar-small student-avatar-display" style="width: 28px; height: 28px; font-size: 0.75rem;">AM</div>
+            <span style="font-size: 0.825rem; font-weight: 700; color: var(--slate-800);" class="student-name-display">Alex Mercer</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- App Content Views Container -->
+      <div class="app-content">
+
+        <!-- ==================== VIEW 1: CATALOG ==================== -->
+        <section class="dashboard-view active" id="view-catalog">
+          <!-- Filter & Search Toolbar -->
+          <div class="toolbar-container">
+            <div class="search-box-wrapper" style="max-width: 380px;">
+              <i class="fas fa-search"></i>
+              <input type="text" id="catalog-search-input" class="form-control" placeholder="Search by title, author, ISBN or topic...">
+            </div>
+
+            <div class="filter-group">
+              <select id="catalog-avail-select" class="form-control form-select" style="width: 170px;">
+                <option value="all">All Inventory</option>
+                <option value="available">Available Now</option>
+                <option value="unavailable">Out of Stock</option>
+              </select>
+
+              <select id="catalog-sort-select" class="form-control form-select" style="width: 170px;">
+                <option value="title_asc">Title (A - Z)</option>
+                <option value="title_desc">Title (Z - A)</option>
+                <option value="popularity">Most Popular</option>
+                <option value="newest">Newest Additions</option>
+                <option value="available">Highest Stock</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Category Filter Pills Bar -->
+          <div class="category-pills-bar" id="category-pills-container">
+            <!-- Dynamic Category Chips -->
+          </div>
+
+          <!-- Results Header Counter -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <div id="catalog-results-count" style="font-size: 0.875rem; color: var(--slate-500); font-weight: 600;">
+              Loading catalog...
+            </div>
+            <div style="font-size: 0.8rem; color: var(--slate-500);">
+              <i class="fas fa-shield-alt" style="color: var(--success);"></i> Instant loan period: 14 days
+            </div>
+          </div>
+
+          <!-- Books Grid -->
+          <div class="featured-books-grid" id="catalog-books-grid">
+            <!-- Rendered by student-controller.js -->
+          </div>
+        </section>
+
+        <!-- ==================== VIEW 2: AI RECOMMENDATIONS ==================== -->
+        <section class="dashboard-view" id="view-recommendations">
+          <!-- AI Engine Showcase Header -->
+          <div class="ai-recommendation-hero">
+            <div class="ai-hero-header">
+              <div class="ai-hero-content">
+                <div class="ai-engine-chip">
+                  <i class="fas fa-brain"></i> Feature 7 • Dynamic Hybrid Recommender
+                </div>
+                <h2 style="font-size: 1.75rem; font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem;">
+                  Tailored Recommendations for <span class="student-name-display">Alex</span>
+                </h2>
+                <p style="font-size: 0.95rem; color: #cbd5e1; line-height: 1.5;">
+                  Our machine-learning algorithm evaluates your borrowing frequency, category interest vectors, and book description similarity while strictly excluding books you've already read.
+                </p>
+
+                <!-- Dynamic Reading Profile Affinity Chips -->
+                <div class="ai-affinity-tags" id="ai-affinity-chips">
+                  <!-- Injected via JS -->
+                </div>
+              </div>
+
+              <div style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: var(--radius-lg); padding: 1rem 1.25rem; text-align: center; backdrop-filter: blur(8px);">
+                <div style="font-size: 0.725rem; text-transform: uppercase; letter-spacing: 0.05em; color: #a5b4fc; font-weight: 700;">Dominant Interest</div>
+                <div id="ai-top-category-badge" style="font-size: 1.2rem; font-weight: 800; color: #ffffff; margin-top: 0.2rem;">Computer Science</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recommendations Grid -->
+          <div class="featured-books-grid" id="ai-recommendations-grid">
+            <!-- Rendered via AIRecommender -->
+          </div>
+        </section>
+
+        <!-- ==================== VIEW 3: MY BORROWED BOOKS ==================== -->
+        <section class="dashboard-view" id="view-my-books">
+          <div class="card" style="margin-bottom: 2rem;">
+            <div class="card-header">
+              <div>
+                <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--slate-900);">Active Book Loans</h3>
+                <p style="font-size: 0.8rem; color: var(--slate-500);">Titles currently in your possession. Return on time to avoid overdue fines ($1.00/day).</p>
+              </div>
+              <span class="badge badge-primary" style="font-size: 0.85rem;">
+                <span id="active-borrows-count-badge">0</span> Active
+              </span>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Book Details</th>
+                    <th>Issue Date</th>
+                    <th>Due Date</th>
+                    <th>Status & Remaining Time</th>
+                    <th>Accrued Fine</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="my-borrowed-table-body">
+                  <!-- Injected via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Past Borrowing History -->
+          <div class="card">
+            <div class="card-header">
+              <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--slate-800);">Past Borrowing History</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Book Title</th>
+                    <th>Issued On</th>
+                    <th>Returned On</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="my-history-table-body">
+                  <!-- Injected via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== VIEW 4: MY RESERVATIONS ==================== -->
+        <section class="dashboard-view" id="view-reservations">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--slate-900);">My Reserved Books (Waitlist)</h3>
+                <p style="font-size: 0.8rem; color: var(--slate-500);">When an unavailable copy is returned, the system automatically holds it for you and triggers a notification.</p>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Reserved Title</th>
+                    <th>Date Placed</th>
+                    <th>Queue Status</th>
+                    <th>Pickup Availability</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="my-reservations-table-body">
+                  <!-- Injected via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== VIEW 5: MY FINES ==================== -->
+        <section class="dashboard-view" id="view-fines">
+          <div class="stats-grid" style="margin-bottom: 1.5rem;">
+            <div class="stat-card">
+              <div class="stat-card-info">
+                <div class="label">Total Unpaid Overdue Balance</div>
+                <div class="value" id="my-fine-balance-display" style="color: var(--danger);">$0.00</div>
+                <div class="trend" style="color: var(--slate-500);">Standard library rate: $1.00 / overdue day</div>
+              </div>
+              <div class="stat-card-icon rose">
+                <i class="fas fa-file-invoice-dollar"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--slate-900);">Fine Records & Payment History</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Book Title</th>
+                    <th>Days Overdue</th>
+                    <th>Fine Amount</th>
+                    <th>Date Incurred</th>
+                    <th>Status</th>
+                    <th>Payment</th>
+                  </tr>
+                </thead>
+                <tbody id="my-fines-table-body">
+                  <!-- Injected via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== VIEW 6: STUDENT PROFILE ==================== -->
+        <section class="dashboard-view" id="view-profile">
+          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 2rem; align-items: flex-start;">
+            <!-- Profile Card -->
+            <div class="card" style="text-align: center; padding: 2.5rem 1.5rem;">
+              <div class="user-avatar-small student-avatar-display" style="width: 80px; height: 80px; font-size: 2rem; margin: 0 auto 1.25rem auto;">AM</div>
+              <h3 class="student-name-display" style="font-size: 1.35rem; font-weight: 800; color: var(--slate-900);">Alex Mercer</h3>
+              <p class="student-email-display" style="font-size: 0.85rem; color: var(--slate-500); margin-bottom: 0.5rem;">alex@student.edu</p>
+              <span class="badge badge-primary" style="margin-bottom: 1.5rem;">Verified Student Member</span>
+
+              <div style="border-top: 1px solid var(--border-color); padding-top: 1.25rem; text-align: left; font-size: 0.875rem;">
+                <div style="margin-bottom: 0.75rem;">
+                  <strong style="color: var(--slate-600);">Student ID:</strong>
+                  <div class="student-id-display" style="color: var(--slate-900); font-weight: 600;">STU-2026-049</div>
+                </div>
+                <div style="margin-bottom: 0.75rem;">
+                  <strong style="color: var(--slate-600);">Department:</strong>
+                  <div style="color: var(--slate-900); font-weight: 600;">Computer Science & Engineering</div>
+                </div>
+                <div>
+                  <strong style="color: var(--slate-600);">Max Loan Limit:</strong>
+                  <div style="color: var(--slate-900); font-weight: 600;">5 Concurrent Books</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Profile Summary & System Health -->
+            <div class="card">
+              <div class="card-header">
+                <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--slate-900);">Student Circulation Guidelines</h3>
+              </div>
+              <div class="card-body">
+                <div style="display: flex; flex-direction: column; gap: 1rem; font-size: 0.9rem; color: var(--slate-600); line-height: 1.6;">
+                  <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+                    <i class="fas fa-calendar-check" style="color: var(--primary); font-size: 1.1rem; margin-top: 2px;"></i>
+                    <div>
+                      <strong style="color: var(--slate-900);">14-Day Borrowing Window:</strong> Each book is issued for 14 calendar days. You can return titles anytime via your portal.
+                    </div>
+                  </div>
+                  <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+                    <i class="fas fa-coins" style="color: var(--warning); font-size: 1.1rem; margin-top: 2px;"></i>
+                    <div>
+                      <strong style="color: var(--slate-900);">Automated Overdue Calculation:</strong> Late returns automatically incur a standard fine of $1.00 per overdue day. Borrowing is paused if unpaid fines exceed $15.00.
+                    </div>
+                  </div>
+                  <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+                    <i class="fas fa-robot" style="color: var(--accent-purple); font-size: 1.1rem; margin-top: 2px;"></i>
+                    <div>
+                      <strong style="color: var(--slate-900);">Adaptive AI Suggestions:</strong> Every book you borrow refines your personal recommendation model.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== BOOK DETAILS MODAL ==================== -->
+  <div class="modal-backdrop" id="book-details-modal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i class="fas fa-book-open" style="color: var(--primary);"></i> Book Overview & Details
+        </div>
+        <button class="modal-close" data-modal-close>&times;</button>
+      </div>
+      <div class="modal-body" id="book-details-modal-body">
+        <!-- Rendered via JS -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-modal-close>Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== FINE PAYMENT MODAL ==================== -->
+  <div class="modal-backdrop" id="fine-payment-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i class="fas fa-credit-card" style="color: var(--success);"></i> Clear Overdue Fine
+        </div>
+        <button class="modal-close" data-modal-close>&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.9rem; color: var(--slate-600); margin-bottom: 1.25rem;">
+          You are clearing the overdue fine for book: <br>
+          <strong id="pay-fine-book-title" style="color: var(--slate-900); font-size: 1rem;">-</strong>
+        </p>
+
+        <div style="background: var(--slate-50); border-radius: var(--radius-md); padding: 1.25rem; border: 1px solid var(--border-color); margin-bottom: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-weight: 600; color: var(--slate-700);">Fine Total:</span>
+            <span id="pay-fine-amount" style="font-size: 1.5rem; font-weight: 800; color: var(--danger);">$0.00</span>
+          </div>
+          <div style="font-size: 0.775rem; color: var(--slate-500); margin-top: 0.35rem;">
+            Simulation Mode: No real financial transaction will take place.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Payment Method</label>
+          <select class="form-control form-select">
+            <option>Student Campus Digital Debit</option>
+            <option>Library Credit Card Simulation</option>
+            <option>Academic Waiver Balance</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-modal-close>Cancel</button>
+        <button class="btn btn-success" id="btn-confirm-pay-fine">
+          Confirm & Pay Fine
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- JavaScript Module -->
+  <script type="module" src="../js/student-controller.js"></script>
+</body>
+</html>

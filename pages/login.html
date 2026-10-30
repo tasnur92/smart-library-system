@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In & Register | Smart Library System</title>
+  
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../css/style.css">
+  
+  <style>
+    .auth-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+      padding: 2rem 1rem;
+    }
+
+    .auth-card-wrapper {
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .auth-brand {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .auth-brand-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 800;
+      font-size: 1.5rem;
+      color: var(--slate-900);
+    }
+
+    .auth-card {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-xl);
+      overflow: hidden;
+    }
+
+    .auth-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+      background: var(--slate-50);
+    }
+
+    .auth-tab-btn {
+      flex: 1;
+      padding: 1rem 0.5rem;
+      border: none;
+      background: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--slate-500);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all var(--transition-fast);
+      border-bottom: 2px solid transparent;
+    }
+
+    .auth-tab-btn:hover {
+      color: var(--slate-800);
+    }
+
+    .auth-tab-btn.active {
+      color: var(--primary);
+      background: var(--white);
+      border-bottom-color: var(--primary);
+    }
+
+    .auth-form-view {
+      display: none;
+      padding: 2rem;
+    }
+
+    .auth-form-view.active {
+      display: block;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+
+    .demo-accounts-strip {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px dashed var(--border-color);
+    }
+
+    .demo-accounts-title {
+      font-size: 0.775rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--slate-400);
+      margin-bottom: 0.75rem;
+      text-align: center;
+    }
+
+    .demo-buttons-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .btn-demo {
+      padding: 0.6rem 0.75rem;
+      font-size: 0.785rem;
+      border-radius: var(--radius-md);
+      background: var(--slate-50);
+      border: 1px solid var(--slate-200);
+      color: var(--slate-700);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: all var(--transition-fast);
+    }
+
+    .btn-demo:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-demo strong {
+      font-size: 0.825rem;
+    }
+
+    .btn-demo span {
+      font-size: 0.72rem;
+      color: var(--slate-500);
+    }
+  </style>
+</head>
+<body class="auth-page">
+
+  <div class="auth-card-wrapper">
+    <!-- Brand Logo -->
+    <div class="auth-brand">
+      <a href="../index.html" class="auth-brand-logo">
+        <div class="brand-icon" style="width: 44px; height: 44px; border-radius: var(--radius-md); background: linear-gradient(135deg, var(--primary) 0%, var(--accent-purple) 100%); display: flex; align-items: center; justify-content: center; color: white;">
+          <i class="fas fa-book-open"></i>
+        </div>
+        <span>Smart<span style="color: var(--primary);">Lib</span><span style="font-size: 0.75rem; background: var(--accent-purple-light); color: var(--accent-purple); padding: 0.2rem 0.5rem; border-radius: var(--radius-full); margin-left: 0.4rem; vertical-align: middle;">AI</span></span>
+      </a>
+      <p style="color: var(--slate-500); font-size: 0.9rem; margin-top: 0.5rem;">Digital Library Access & Management System</p>
+    </div>
+
+    <!-- Main Card -->
+    <div class="auth-card">
+      <!-- Role / Action Tabs -->
+      <div class="auth-tabs">
+        <button class="auth-tab-btn active" data-tab="student-login">
+          <i class="fas fa-user-graduate"></i> Student Login
+        </button>
+        <button class="auth-tab-btn" data-tab="student-register">
+          <i class="fas fa-user-plus"></i> Register
+        </button>
+        <button class="auth-tab-btn" data-tab="admin-login">
+          <i class="fas fa-shield-alt"></i> Admin
+        </button>
+      </div>
+
+      <!-- ================= 1. STUDENT LOGIN FORM ================= -->
+      <div class="auth-form-view active" id="tab-student-login">
+        <div style="margin-bottom: 1.5rem;">
+          <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--slate-900);">Student Portal Login</h2>
+          <p style="font-size: 0.85rem; color: var(--slate-500);">Sign in to borrow, view recommendations, and reserve books</p>
+        </div>
+
+        <form id="form-student-login">
+          <div class="form-group">
+            <label class="form-label" for="student-login-email">Student Email Address</label>
+            <input type="email" id="student-login-email" class="form-control" placeholder="alex@student.edu" required autocomplete="username">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="student-login-password">Password</label>
+            <input type="password" id="student-login-password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
+            <i class="fas fa-sign-in-alt"></i> Sign In to Student Portal
+          </button>
+        </form>
+
+        <!-- One-Click Instant Demo Access -->
+        <div class="demo-accounts-strip">
+          <div class="demo-accounts-title">⚡ Instant Testing Accounts</div>
+          <div class="demo-buttons-grid">
+            <button class="btn-demo" id="btn-quick-alex">
+              <strong>Alex Mercer</strong>
+              <span>CS Major (Active Loans)</span>
+            </button>
+            <button class="btn-demo" id="btn-quick-emma">
+              <strong>Emma Watson</strong>
+              <span>Literature Major</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 2. STUDENT REGISTER FORM ================= -->
+      <div class="auth-form-view" id="tab-student-register">
+        <div style="margin-bottom: 1.5rem;">
+          <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--slate-900);">Create Student Account</h2>
+          <p style="font-size: 0.85rem; color: var(--slate-500);">Join the library to start borrowing and getting AI suggestions</p>
+        </div>
+
+        <form id="form-student-register">
+          <div class="form-group">
+            <label class="form-label" for="reg-name">Full Name</label>
+            <input type="text" id="reg-name" class="form-control" placeholder="e.g. David Miller" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-email">Email Address</label>
+            <input type="email" id="reg-email" class="form-control" placeholder="david@student.edu" required autocomplete="username">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-department">Academic Department / Major</label>
+            <select id="reg-department" class="form-control form-select">
+              <option value="Computer Science">Computer Science & Engineering</option>
+              <option value="Artificial Intelligence">Artificial Intelligence & Data</option>
+              <option value="Literature">Literature & Humanities</option>
+              <option value="Science">Physical & Natural Sciences</option>
+              <option value="Business">Business & Management</option>
+              <option value="Philosophy">Philosophy & Social Sciences</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-password">Create Password</label>
+            <input type="password" id="reg-password" class="form-control" placeholder="At least 6 characters" minlength="6" required autocomplete="new-password">
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
+            <i class="fas fa-user-plus"></i> Complete Registration
+          </button>
+        </form>
+      </div>
+
+      <!-- ================= 3. ADMIN LOGIN FORM ================= -->
+      <div class="auth-form-view" id="tab-admin-login">
+        <div style="margin-bottom: 1.5rem;">
+          <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--slate-900);">Administrator Sign In</h2>
+          <p style="font-size: 0.85rem; color: var(--slate-500);">Librarians, catalog managers, and circulation officers</p>
+        </div>
+
+        <form id="form-admin-login">
+          <div class="form-group">
+            <label class="form-label" for="admin-login-email">Admin Email Address</label>
+            <input type="email" id="admin-login-email" class="form-control" placeholder="admin@library.edu" required autocomplete="username">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="admin-login-password">Master Password</label>
+            <input type="password" id="admin-login-password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem; background-color: var(--slate-900);">
+            <i class="fas fa-shield-alt"></i> Access Admin Console
+          </button>
+        </form>
+
+        <!-- One-Click Demo Admin -->
+        <div class="demo-accounts-strip">
+          <div class="demo-accounts-title">⚡ Instant Admin Demo</div>
+          <button class="btn-demo" id="btn-quick-admin" style="width: 100%;">
+            <strong>Dr. Sarah Sterling (Chief Librarian)</strong>
+            <span>Full Catalog, Fine & User Management Privileges</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Back to Landing Link -->
+    <div style="text-align: center; margin-top: 1.5rem;">
+      <a href="../index.html" style="font-size: 0.875rem; color: var(--slate-500); font-weight: 600;">
+        <i class="fas fa-arrow-left"></i> Back to Library Landing Page
+      </a>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- Script Module -->
+  <script type="module">
+    import { AuthService } from "../js/auth.js";
+
+    function showToast(title, message, type = "info") {
+      const container = document.getElementById("toast-container");
+      if (!container) return;
+
+      const toast = document.createElement("div");
+      toast.className = `toast toast-${type}`;
+      toast.innerHTML = `
+        <div class="toast-icon">
+          <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'danger' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+        </div>
+        <div class="toast-content">
+          <div class="toast-title">${title}</div>
+          <div class="toast-message">${message}</div>
+        </div>
+        <button class="toast-close" onclick="this.parentElement.remove()">&times;</button>
+      `;
+
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.animation = "toastFadeOut 0.3s forwards";
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    // Tabs switching
+    const tabButtons = document.querySelectorAll(".auth-tab-btn");
+    const tabViews = document.querySelectorAll(".auth-form-view");
+
+    function activateTab(tabKey) {
+      tabButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.tab === tabKey));
+      tabViews.forEach(view => view.classList.toggle("active", view.id === `tab-${tabKey}`));
+    }
+
+    tabButtons.forEach(btn => {
+      btn.addEventListener("click", () => activateTab(btn.dataset.tab));
+    });
+
+    // Check if hash is #register
+    if (window.location.hash === "#register") {
+      activateTab("student-register");
+    }
+
+    // 1. Handle Student Login
+    document.getElementById("form-student-login").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("student-login-email").value;
+      const pass = document.getElementById("student-login-password").value;
+
+      try {
+        const user = await AuthService.login(email, pass);
+        showToast("Signed In", `Welcome back, ${user.name}!`, "success");
+        setTimeout(() => {
+          window.location.href = user.role === "admin" ? "admin-dashboard.html" : "student-dashboard.html";
+        }, 600);
+      } catch (err) {
+        showToast("Login Failed", err.message, "danger");
+      }
+    });
+
+    // 2. Handle Student Registration
+    document.getElementById("form-student-register").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = document.getElementById("reg-name").value;
+      const email = document.getElementById("reg-email").value;
+      const department = document.getElementById("reg-department").value;
+      const password = document.getElementById("reg-password").value;
+
+      try {
+        const user = await AuthService.register({
+          name,
+          email,
+          password,
+          role: "student",
+          department
+        });
+
+        showToast("Registration Complete 🎉", `Welcome to Smart Library, ${user.name}!`, "success");
+        setTimeout(() => {
+          window.location.href = "student-dashboard.html";
+        }, 800);
+      } catch (err) {
+        showToast("Registration Failed", err.message, "danger");
+      }
+    });
+
+    // 3. Handle Admin Login
+    document.getElementById("form-admin-login").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("admin-login-email").value;
+      const pass = document.getElementById("admin-login-password").value;
+
+      try {
+        const user = await AuthService.login(email, pass);
+        if (user.role !== "admin") {
+          throw new Error("This account does not have administrative privileges.");
+        }
+        showToast("Admin Authenticated", `Welcome Dr. Sarah!`, "success");
+        setTimeout(() => {
+          window.location.href = "admin-dashboard.html";
+        }, 600);
+      } catch (err) {
+        showToast("Access Denied", err.message, "danger");
+      }
+    });
+
+    // Demo Quick Buttons
+    document.getElementById("btn-quick-alex").addEventListener("click", async () => {
+      document.getElementById("student-login-email").value = "alex@student.edu";
+      document.getElementById("student-login-password").value = "student123";
+      document.getElementById("form-student-login").dispatchEvent(new Event("submit"));
+    });
+
+    document.getElementById("btn-quick-emma").addEventListener("click", async () => {
+      document.getElementById("student-login-email").value = "emma@student.edu";
+      document.getElementById("student-login-password").value = "student123";
+      document.getElementById("form-student-login").dispatchEvent(new Event("submit"));
+    });
+
+    document.getElementById("btn-quick-admin").addEventListener("click", async () => {
+      document.getElementById("admin-login-email").value = "admin@library.edu";
+      document.getElementById("admin-login-password").value = "admin123";
+      document.getElementById("form-admin-login").dispatchEvent(new Event("submit"));
+    });
+  </script>
+</body>
+</html>

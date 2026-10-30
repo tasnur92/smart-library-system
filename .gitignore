@@ -1,0 +1,14 @@
+# System and logs
+.DS_Store
+Thumbs.db
+*.log
+
+# Deployment build caches
+.firebase/
+.vercel/
+
+# Private environment/credentials (if any)
+*.env
+*.local
+credentials.json
+service-account*.json

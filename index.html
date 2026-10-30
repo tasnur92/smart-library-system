@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Library | Next-Gen AI-Powered Library System</title>
+  
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Core & Landing Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/landing.css">
+</head>
+<body>
+
+  <!-- ==================== NAVIGATION BAR ==================== -->
+  <nav class="landing-nav">
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fas fa-book-open"></i>
+        </div>
+        <span>Smart<span style="color: var(--primary);">Lib</span><span style="font-size: 0.75rem; background: var(--accent-purple-light); color: var(--accent-purple); padding: 0.2rem 0.5rem; border-radius: var(--radius-full); margin-left: 0.4rem; vertical-align: middle;">AI</span></span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#featured-books">Browse Catalog</a></li>
+        <li><a href="#ai-features">AI Engine</a></li>
+        <li><a href="#library-features">Features</a></li>
+        <li><a href="#about-section">About</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="pages/login.html" class="btn btn-outline btn-sm">Sign In</a>
+        <a href="pages/login.html#register" id="nav-auth-btn" class="btn btn-primary btn-sm">Get Started</a>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle navigation menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== HERO SECTION ==================== -->
+  <header class="hero-section">
+    <div class="hero-glow-1"></div>
+    <div class="hero-glow-2"></div>
+    
+    <div class="hero-container">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <i class="fas fa-brain"></i> Powered by Content-Based & Collaborative AI
+        </div>
+
+        <h1 class="hero-title">
+          Smart Library System <br>
+          <span class="gradient-text">Intelligent & Seamless</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Empowering students and librarians with real-time digital book issuing, atomic inventory tracking, automated overdue fine management, waitlist reservations, and personalized AI book recommendations.
+        </p>
+
+        <!-- Live Instant Search Bar -->
+        <div class="hero-search-card">
+          <div class="hero-search-input-group">
+            <i class="fas fa-search"></i>
+            <input type="text" id="hero-search-input" placeholder="Search 1,000+ titles, authors, categories or ISBNs...">
+          </div>
+          <button class="btn btn-primary" id="hero-search-btn">
+            Search
+          </button>
+        </div>
+
+        <!-- Quick Tag Suggestions -->
+        <div class="quick-tags">
+          <span style="font-weight: 600;">Popular searches:</span>
+          <span class="quick-tag-pill">Computer Science</span>
+          <span class="quick-tag-pill">Artificial Intelligence</span>
+          <span class="quick-tag-pill">Clean Code</span>
+          <span class="quick-tag-pill">Literature</span>
+          <span class="quick-tag-pill">Science Fiction</span>
+        </div>
+      </div>
+
+      <!-- Hero Visual Graphic Stack -->
+      <div class="hero-visual">
+        <div class="hero-card-stack">
+          <!-- Main Card -->
+          <div class="hero-main-card">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+              <span class="badge badge-purple"><i class="fas fa-sparkles"></i> AI Recommendation Match</span>
+              <span style="font-size: 0.8rem; color: var(--slate-400);"><i class="fas fa-bolt"></i> Real-time</span>
+            </div>
+
+            <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+              <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=300&q=80" alt="Clean Code" style="width: 75px; height: 95px; object-fit: cover; border-radius: var(--radius-md);">
+              <div>
+                <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--slate-900); line-height: 1.3;">Clean Code</h4>
+                <p style="font-size: 0.8rem; color: var(--slate-500); margin-bottom: 0.3rem;">By Robert C. Martin</p>
+                <span class="badge badge-success"><i class="fas fa-check"></i> Available on Shelf</span>
+              </div>
+            </div>
+
+            <div style="background: var(--slate-50); border-radius: var(--radius-md); padding: 0.75rem; font-size: 0.8rem; color: var(--slate-600); margin-bottom: 1rem;">
+              <i class="fas fa-robot" style="color: var(--accent-purple);"></i> <strong>98% Match:</strong> Based on your interest in software architecture and algorithms.
+            </div>
+
+            <a href="pages/login.html" class="btn btn-primary btn-sm" style="width: 100%;">
+              <i class="fas fa-book-reader"></i> Borrow Digitally Now
+            </a>
+          </div>
+
+          <!-- Floating Badge Top Right -->
+          <div class="hero-floating-badge badge-top-right">
+            <div style="width: 38px; height: 38px; border-radius: 50%; background: var(--success-light); color: var(--success); display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div>
+              <div style="font-size: 0.85rem; font-weight: 700; color: var(--slate-900);">Instant Issue</div>
+              <div style="font-size: 0.725rem; color: var(--slate-500);">Atomic transactions</div>
+            </div>
+          </div>
+
+          <!-- Floating Badge Bottom Left -->
+          <div class="hero-floating-badge badge-bottom-left">
+            <div style="width: 38px; height: 38px; border-radius: 50%; background: var(--info-light); color: var(--info); display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
+              <i class="fas fa-bell"></i>
+            </div>
+            <div>
+              <div style="font-size: 0.85rem; font-weight: 700; color: var(--slate-900);">Smart Waitlist</div>
+              <div style="font-size: 0.725rem; color: var(--slate-500);">Auto-alerts on return</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== STATS STRIP ==================== -->
+  <section class="stats-ribbon">
+    <div class="stats-container">
+      <div class="stat-item">
+        <div class="stat-item-number">15,000+</div>
+        <div class="stat-item-label">Books & Digital Media</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-item-number">99.4%</div>
+        <div class="stat-item-label">On-Time Returns</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-item-number">5,200+</div>
+        <div class="stat-item-label">Registered Students</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-item-number">24/7</div>
+        <div class="stat-item-label">Digital Access & Reservations</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FEATURED BOOKS CATALOG ==================== -->
+  <section id="featured-books" class="section-padding">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Featured Catalog</span>
+        <h2 class="section-title">Explore Our Library Collection</h2>
+        <p class="section-description">
+          Browse through our curated catalog spanning computer science, artificial intelligence, classic literature, astrophysics, and business.
+        </p>
+      </div>
+
+      <!-- Dynamic Book Grid (Rendered by landing.js) -->
+      <div class="featured-books-grid" id="featured-books-grid">
+        <!-- Rendered via JS -->
+      </div>
+
+      <div style="text-align: center; margin-top: 3rem;">
+        <a href="pages/login.html" class="btn btn-outline btn-lg">
+          <i class="fas fa-th-large"></i> View All Titles in Library Portal
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== AI RECOMMENDATION SPOTLIGHT ==================== -->
+  <section id="ai-features" class="container">
+    <div class="ai-showcase-section">
+      <div class="ai-showcase-grid">
+        <div>
+          <div class="ai-badge">
+            <i class="fas fa-brain"></i> Feature 7 • AI-Powered Book Engine
+          </div>
+          <h2 class="ai-showcase-title">Personalized Book Recommendations Powered by Machine Intelligence</h2>
+          <p class="ai-showcase-p">
+            Our recommendation algorithm builds a dynamic profile of your reading interests by analyzing borrowing history, category affinities, author overlap, and semantic book keywords.
+          </p>
+
+          <ul class="ai-feature-list">
+            <li>
+              <i class="fas fa-check-circle"></i>
+              <span><strong>Category Frequency Vector:</strong> Captures the subjects you explore most often with exponential recency decay.</span>
+            </li>
+            <li>
+              <i class="fas fa-check-circle"></i>
+              <span><strong>Author Affinity Matching:</strong> Automatically prioritizes authors whose books you've completed.</span>
+            </li>
+            <li>
+              <i class="fas fa-check-circle"></i>
+              <span><strong>Deduplication Filter:</strong> Never recommends books you have already read or are currently borrowing.</span>
+            </li>
+            <li>
+              <i class="fas fa-check-circle"></i>
+              <span><strong>Explainable AI:</strong> Clear, human-readable insights explaining why each title was selected for you.</span>
+            </li>
+          </ul>
+
+          <div style="margin-top: 2rem;">
+            <a href="pages/login.html" class="btn btn-primary">
+              <i class="fas fa-sparkles"></i> Try AI Recommender Now
+            </a>
+          </div>
+        </div>
+
+        <!-- AI Preview Box -->
+        <div class="ai-preview-card">
+          <h4 style="font-size: 1rem; font-weight: 700; color: #ffffff; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fas fa-chart-line" style="color: #a78bfa;"></i> Simulated Student Vector Profile
+          </h4>
+
+          <div class="ai-vector-item">
+            <span style="color: #e2e8f0; font-size: 0.875rem;">Computer Science Affinity</span>
+            <span class="badge badge-purple">48% Dominant</span>
+          </div>
+          <div class="ai-vector-item">
+            <span style="color: #e2e8f0; font-size: 0.875rem;">Artificial Intelligence Affinity</span>
+            <span class="badge badge-purple">32% High</span>
+          </div>
+          <div class="ai-vector-item">
+            <span style="color: #e2e8f0; font-size: 0.875rem;">Science Fiction Interest</span>
+            <span class="badge badge-purple">20% Moderate</span>
+          </div>
+          <div class="ai-vector-item">
+            <span style="color: #e2e8f0; font-size: 0.875rem;">Active Loans</span>
+            <span style="color: #38bdf8; font-weight: 700;">2 Books</span>
+          </div>
+
+          <div style="background: rgba(255, 255, 255, 0.08); border-radius: var(--radius-md); padding: 1rem; margin-top: 1.25rem;">
+            <div style="font-size: 0.775rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 0.4rem;">Top AI Output</div>
+            <div style="font-weight: 700; color: #ffffff; font-size: 0.95rem;">Designing Data-Intensive Applications</div>
+            <div style="font-size: 0.8rem; color: #a5b4fc; margin-top: 0.2rem;">
+              <i class="fas fa-star" style="color: #facc15;"></i> 96% Match • Based on your interest in software architecture
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== COMPLETE FEATURES GRID ==================== -->
+  <section id="library-features" class="section-padding">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">System Capabilities</span>
+        <h2 class="section-title">Everything Needed for Modern Library Administration</h2>
+        <p class="section-description">
+          A fully integrated web platform handling end-to-end borrowing workflows, catalog management, real-time reservations, and automated fines.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <!-- Feature 1 -->
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">
+            <i class="fas fa-user-shield"></i>
+          </div>
+          <h3 class="feature-title">Role-Based Authentication</h3>
+          <p class="feature-desc">
+            Secure login with Firebase Authentication and Firestore synchronization. Distinct dashboards and route protection for Admins and Students.
+          </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="feature-box purple">
+          <div class="feature-icon-wrapper">
+            <i class="fas fa-book"></i>
+          </div>
+          <h3 class="feature-title">Comprehensive Book Management</h3>
+          <p class="feature-desc">
+            Librarians can add, edit, and delete books with ISBN validation, duplicate prevention, category assignments, and live stock tracking.
+          </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="feature-box sky">
+          <div class="feature-icon-wrapper">
+            <i class="fas fa-search"></i>
+          </div>
+          <h3 class="feature-title">Dynamic Search & Filtering</h3>
+          <p class="feature-desc">
+            Instant full-text search across titles, authors, categories, and ISBNs with interactive category chips, stock filters, and sorting.
+          </p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="feature-box emerald">
+          <div class="feature-icon-wrapper">
+            <i class="fas fa-exchange-alt"></i>
+          </div>
+          <h3 class="feature-title">Atomic Issue & Return</h3>
+          <p class="feature-desc">
+            Firestore transactions guarantee inventory accuracy when issuing and returning books. Automatic loan countdown and return validation.
+          </p>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="feature-box amber">
+          <div class="feature-icon-wrapper">
+            <i class="fas fa-file-invoice-dollar"></i>
+          </div>
+          <h3 class="feature-title">Automated Overdue Fines</h3>
+          <p class="feature-desc">
+            Calculates overdue fines automatically when a book passes its due date. Complete payment ledger with admin waivers and student receipts.
+          </p>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">
+            <i class="fas fa-bookmark"></i>
+          </div>
+          <h3 class="feature-title">Smart Waitlist Reservations</h3>
+          <p class="feature-desc">
+            Students can reserve out-of-stock titles. The moment a book is returned, the system automatically alerts the next student in line.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ABOUT SECTION ==================== -->
+  <section id="about-section" class="section-padding" style="background-color: var(--white); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+    <div class="container">
+      <div class="about-grid">
+        <div>
+          <span class="section-tag">About The System</span>
+          <h2 class="section-title">Built with Cutting-Edge Web Standards</h2>
+          <p class="section-description" style="text-align: left; margin-bottom: 1.5rem;">
+            Designed strictly with pure HTML5, CSS3, and ES6 Vanilla JavaScript Modules connected to Google Firebase Authentication and Cloud Firestore. Built without heavy frontend framework overhead, guaranteeing blazing fast load times and clean, maintainable architecture.
+          </p>
+
+          <div class="about-features-list">
+            <div class="about-feature-item">
+              <i class="fas fa-check-circle"></i>
+              <div>
+                <strong>Zero Framework Overhead</strong>
+                <div style="font-size: 0.8rem; color: var(--slate-500);">Vanilla ES6 modules for optimal performance</div>
+              </div>
+            </div>
+            <div class="about-feature-item">
+              <i class="fas fa-check-circle"></i>
+              <div>
+                <strong>Atomic Firestore Safety</strong>
+                <div style="font-size: 0.8rem; color: var(--slate-500);">Concurrency-proof inventory operations</div>
+              </div>
+            </div>
+            <div class="about-feature-item">
+              <i class="fas fa-check-circle"></i>
+              <div>
+                <strong>Hybrid Data Engine</strong>
+                <div style="font-size: 0.8rem; color: var(--slate-500);">Seamless local fallback + live Firebase sync</div>
+              </div>
+            </div>
+            <div class="about-feature-item">
+              <i class="fas fa-check-circle"></i>
+              <div>
+                <strong>Mobile-First Design</strong>
+                <div style="font-size: 0.8rem; color: var(--slate-500);">Fully responsive across desktop, tablet, and mobile</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=700&q=80" alt="Modern Library Interior" style="border-radius: var(--radius-xl); box-shadow: var(--shadow-xl); border: 1px solid var(--border-color);">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CALL TO ACTION ==================== -->
+  <section class="container" style="margin-top: 5rem;">
+    <div class="cta-banner">
+      <h2 class="cta-title">Ready to Experience the Smart Library?</h2>
+      <p class="cta-sub">
+        Create a student account or sign in with admin credentials to start borrowing, reviewing AI recommendations, and managing the digital library catalog.
+      </p>
+      <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+        <a href="pages/login.html#register" class="btn btn-secondary btn-lg" style="background: var(--white); color: var(--primary);">
+          <i class="fas fa-user-plus"></i> Register as Student
+        </a>
+        <a href="pages/login.html" class="btn btn-outline btn-lg" style="color: var(--white); border-color: rgba(255,255,255,0.6);">
+          <i class="fas fa-sign-in-alt"></i> Sign In to Portal
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="landing-footer">
+    <div class="footer-container">
+      <div>
+        <div class="footer-brand-title">
+          <i class="fas fa-book-reader" style="color: var(--primary);"></i> Smart Library System
+        </div>
+        <p class="footer-brand-p">
+          Next-generation digital library management and AI-powered book recommendations platform built for universities, schools, and modern learning institutions.
+        </p>
+        <div style="display: flex; gap: 0.75rem;">
+          <span class="badge badge-purple">HTML5</span>
+          <span class="badge badge-purple">CSS3</span>
+          <span class="badge badge-purple">Vanilla JS</span>
+          <span class="badge badge-purple">Firestore</span>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="footer-heading">Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="#featured-books">Browse Catalog</a></li>
+          <li><a href="#ai-features">AI Recommendations</a></li>
+          <li><a href="pages/login.html">Student Login</a></li>
+          <li><a href="pages/login.html">Admin Portal</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-heading">Library Hours</h4>
+        <ul class="footer-links">
+          <li>Monday – Friday: 8:00 AM – 10:00 PM</li>
+          <li>Saturday: 9:00 AM – 8:00 PM</li>
+          <li>Sunday: 10:00 AM – 6:00 PM</li>
+          <li>Digital Portal: Open 24/7/365</li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-heading">Support & Contact</h4>
+        <ul class="footer-links">
+          <li><i class="fas fa-map-marker-alt"></i> University Campus, Building B</li>
+          <li><i class="fas fa-envelope"></i> library@university.edu</li>
+          <li><i class="fas fa-phone"></i> +1 (800) 555-BOOK</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>&copy; 2026 Smart Library Management System. All rights reserved.</div>
+      <div>Designed with Pure Vanilla JS & Cloud Firestore.</div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- JavaScript Modules -->
+  <script type="module" src="js/landing.js"></script>
+</body>
+</html>

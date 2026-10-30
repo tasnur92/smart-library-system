@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal | Smart Library Management System</title>
+  
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Core & Dashboard Stylesheets -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <!-- ==================== ADMIN SIDEBAR ==================== -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <a href="../index.html" class="sidebar-brand">
+          <div class="sidebar-brand-icon" style="background: linear-gradient(135deg, #0f172a 0%, #4338ca 100%);">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <span>Smart<span style="color: var(--primary);">Admin</span></span>
+        </a>
+        <span class="sidebar-role-badge" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border-color: rgba(245, 158, 11, 0.3);">
+          Administrator
+        </span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Library Operations</div>
+        <a href="#overview" class="sidebar-link active" data-view="overview">
+          <i class="fas fa-chart-pie"></i>
+          <span>Analytics Overview</span>
+        </a>
+        <a href="#books" class="sidebar-link" data-view="books">
+          <i class="fas fa-book"></i>
+          <span>Book Inventory</span>
+        </a>
+        <a href="#borrowings" class="sidebar-link" data-view="borrowings">
+          <i class="fas fa-exchange-alt"></i>
+          <span>Borrowings & Returns</span>
+        </a>
+
+        <div class="nav-section-title">Circulation & Ledgers</div>
+        <a href="#reservations" class="sidebar-link" data-view="reservations">
+          <i class="fas fa-bookmark"></i>
+          <span>Reservation Queue</span>
+        </a>
+        <a href="#fines" class="sidebar-link" data-view="fines">
+          <i class="fas fa-file-invoice-dollar"></i>
+          <span>Fine Management</span>
+        </a>
+        <a href="#users" class="sidebar-link" data-view="users">
+          <i class="fas fa-users"></i>
+          <span>User Directory</span>
+        </a>
+
+        <div class="nav-section-title">System & Cloud</div>
+        <a href="#settings" class="sidebar-link" data-view="settings">
+          <i class="fas fa-sliders-h"></i>
+          <span>Firebase & Data</span>
+        </a>
+        <a href="../index.html" class="sidebar-link">
+          <i class="fas fa-home"></i>
+          <span>Public Landing</span>
+        </a>
+      </nav>
+
+      <!-- Sidebar User Meta Footer -->
+      <div class="sidebar-footer">
+        <div class="user-avatar-small admin-avatar-display" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">SS</div>
+        <div class="user-meta-sidebar">
+          <div class="name admin-name-display">Dr. Sarah Sterling</div>
+          <div class="role">Chief Librarian</div>
+        </div>
+        <button class="sidebar-logout-btn" id="sidebar-logout-btn" title="Sign Out">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- ==================== MAIN CONTENT AREA ==================== -->
+    <main class="app-main">
+      <!-- Top Application Bar -->
+      <header class="app-topbar">
+        <div class="topbar-left">
+          <button class="mobile-sidebar-toggle" id="mobile-sidebar-toggle">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h1 class="page-heading-title">Library Administration Portal</h1>
+        </div>
+
+        <div class="topbar-right">
+          <button class="btn btn-primary btn-sm" id="btn-open-add-book-modal">
+            <i class="fas fa-plus"></i> <span>Add New Book</span>
+          </button>
+
+          <!-- Admin Profile Tag -->
+          <div style="display: flex; align-items: center; gap: 0.65rem; background: var(--slate-100); padding: 0.35rem 0.75rem; border-radius: var(--radius-full); border: 1px solid var(--slate-200);">
+            <div class="user-avatar-small admin-avatar-display" style="width: 28px; height: 28px; font-size: 0.75rem; background: #d97706;">SS</div>
+            <span style="font-size: 0.825rem; font-weight: 700; color: var(--slate-800);" class="admin-name-display">Dr. Sarah Sterling</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- App Content Views Container -->
+      <div class="app-content">
+
+        <!-- ==================== VIEW 1: OVERVIEW & ANALYTICS ==================== -->
+        <section class="dashboard-view active" id="view-overview">
+          <!-- 6 Key Performance Indicator Stat Cards -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-card-info">
+                <div class="label">Total Catalog Titles</div>
+                <div class="value" id="stat-total-titles">0</div>
+                <div class="trend"><i class="fas fa-check-circle"></i> Complete collection</div>
+              </div>
+              <div class="stat-card-icon blue"><i class="fas fa-book"></i></div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-info">
+                <div class="label">Active Issued Copies</div>
+                <div class="value" id="stat-active-issued" style="color: var(--primary);">0</div>
+                <div class="trend" style="color: var(--primary);"><i class="fas fa-arrow-up"></i> In circulation</div>
+              </div>
+              <div class="stat-card-icon purple"><i class="fas fa-book-reader"></i></div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-info">
+                <div class="label">Available on Shelf</div>
+                <div class="value" id="stat-available-copies" style="color: var(--success);">0</div>
+                <div class="trend"><i class="fas fa-layer-group"></i> Ready to issue</div>
+              </div>
+              <div class="stat-card-icon emerald"><i class="fas fa-boxes"></i></div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-info">
+                <div class="label">Registered Members</div>
+                <div class="value" id="stat-registered-users">0</div>
+                <div class="trend"><i class="fas fa-users"></i> Students & Staff</div>
+              </div>
+              <div class="stat-card-icon blue"><i class="fas fa-user-graduate"></i></div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-info">
+                <div class="label">Active Reservations</div>
+                <div class="value" id="stat-pending-reserves" style="color: var(--warning);">0</div>
+                <div class="trend" style="color: var(--warning);"><i class="fas fa-hourglass-half"></i> In waitlist queue</div>
+              </div>
+              <div class="stat-card-icon amber"><i class="fas fa-bookmark"></i></div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-info">
+                <div class="label">Unpaid Overdue Fines</div>
+                <div class="value" id="stat-unpaid-fines" style="color: var(--danger);">$0.00</div>
+                <div class="trend" style="color: var(--danger);"><i class="fas fa-exclamation-triangle"></i> Pending collection</div>
+              </div>
+              <div class="stat-card-icon rose"><i class="fas fa-receipt"></i></div>
+            </div>
+          </div>
+
+          <!-- Analytics Charts & Activity Log Grid -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem;">
+            <!-- Category Distribution Analytics -->
+            <div class="card">
+              <div class="card-header">
+                <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--slate-900);">Category Distribution (Stock)</h3>
+              </div>
+              <div class="card-body" id="analytics-category-bars">
+                <!-- Injected via JS -->
+              </div>
+            </div>
+
+            <!-- Recent Activity Audit Trail -->
+            <div class="card">
+              <div class="card-header">
+                <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--slate-900);">Recent Circulation Activity</h3>
+              </div>
+              <div class="card-body" id="admin-recent-activity-list" style="padding-top: 0.5rem;">
+                <!-- Injected via JS -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== VIEW 2: BOOK INVENTORY MANAGEMENT ==================== -->
+        <section class="dashboard-view" id="view-books">
+          <div class="toolbar-container">
+            <div class="search-box-wrapper" style="max-width: 380px;">
+              <i class="fas fa-search"></i>
+              <input type="text" id="admin-book-search" class="form-control" placeholder="Search inventory by title, author, ISBN...">
+            </div>
+
+            <button class="btn btn-primary" onclick="document.getElementById('btn-open-add-book-modal').click()">
+              <i class="fas fa-plus"></i> Add New Book
+            </button>
+          </div>
+
+          <div class="card">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Cover</th>
+                    <th>Title & Author</th>
+                    <th>Category</th>
+                    <th>ISBN-13</th>
+                    <th>Stock (Avail/Total)</th>
+                    <th>Location</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-books-table-body">
+                  <!-- Injected via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== VIEW 3: BORROWINGS & RETURNS ==================== -->
+        <section class="dashboard-view" id="view-borrowings">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--slate-900);">All Book Borrowings & Loan Circulation</h3>
+                <p style="font-size: 0.8rem; color: var(--slate-500);">Monitor active loans, verify return status, and execute atomic check-in returns.</p>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Book Title & ISBN</th>
+                    <th>Student Borrower</th>
+                    <th>Issue Date</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                    <th>Return Date</th>
+                    <th>Circulation Action</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-borrowings-table-body">
+                  <!-- Injected via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== VIEW 4: RESERVATION QUEUE ==================== -->
+        <section class="dashboard-view" id="view-reservations">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--slate-900);">Student Book Reservation Queue</h3>
+                <p style="font-size: 0.8rem; color: var(--slate-500);">Waitlists for out-of-stock titles. Fulfill or manage student book holds.</p>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Book Title</th>
+                    <th>Student Borrower</th>
+                    <th>Reservation Date</th>
+                    <th>Waitlist Status</th>
+                    <th>Management Action</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-reservations-table-body">
+                  <!-- Injected via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== VIEW 5: FINE MANAGEMENT ==================== -->
+        <section class="dashboard-view" id="view-fines">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--slate-900);">Overdue Fines & Payment Records</h3>
+                <p style="font-size: 0.8rem; color: var(--slate-500);">Review automated overdue charges ($1.00/day). Collect payments or issue administrative waivers.</p>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Overdue Book Title</th>
+                    <th>Student UID</th>
+                    <th>Days Late</th>
+                    <th>Fine Incurred</th>
+                    <th>Payment Status</th>
+                    <th>Date Generated</th>
+                    <th>Admin Action</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-fines-table-body">
+                  <!-- Injected via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== VIEW 6: USER DIRECTORY ==================== -->
+        <section class="dashboard-view" id="view-users">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--slate-900);">Registered Library Users</h3>
+                <p style="font-size: 0.8rem; color: var(--slate-500);">Directory of enrolled students, research scholars, and administrative staff.</p>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>System Role</th>
+                    <th>Student / Staff ID</th>
+                    <th>Department</th>
+                    <th>Member Since</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-users-table-body">
+                  <!-- Injected via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== VIEW 7: FIREBASE & SYSTEM SETTINGS ==================== -->
+        <section class="dashboard-view" id="view-settings">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: flex-start;">
+            <!-- Database Management -->
+            <div class="card">
+              <div class="card-header">
+                <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--slate-900);">Database Seed & Quick Reset</h3>
+              </div>
+              <div class="card-body">
+                <p style="font-size: 0.875rem; color: var(--slate-600); line-height: 1.6; margin-bottom: 1.5rem;">
+                  Need to demonstrate the system from a clean slate? Click the button below to re-populate the library with 14 comprehensive books, 3 test users, initial borrowings, overdue fines, and reservations.
+                </p>
+
+                <button class="btn btn-primary" id="btn-seed-sample-data">
+                  <i class="fas fa-sync-alt"></i> Re-Seed Library Sample Dataset
+                </button>
+              </div>
+            </div>
+
+            <!-- Firebase Connection Configuration -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--slate-900);">Cloud Firestore Configuration</h3>
+                  <div id="firebase-status-badge" style="margin-top: 0.35rem;">
+                    <!-- Badge rendered by admin-controller.js -->
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <p style="font-size: 0.85rem; color: var(--slate-600); margin-bottom: 1rem;">
+                  Paste your Firebase Web App configuration JSON below to connect to your live Firebase project:
+                </p>
+                <div class="form-group">
+                  <textarea id="custom-firebase-config-json" class="form-control" rows="8" style="font-family: var(--font-mono); font-size: 0.8rem;"></textarea>
+                </div>
+                <div style="display: flex; gap: 0.75rem;">
+                  <button class="btn btn-primary btn-sm" id="btn-save-firebase-config">
+                    <i class="fas fa-save"></i> Save & Connect Live Firebase
+                  </button>
+                  <button class="btn btn-secondary btn-sm" id="btn-reset-firebase-config">
+                    Reset Config
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== ADD / EDIT BOOK MODAL ==================== -->
+  <div class="modal-backdrop" id="add-book-modal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-add-book-title">
+          <i class="fas fa-book" style="color: var(--primary);"></i> Add New Book to Catalog
+        </div>
+        <button class="modal-close" data-modal-close>&times;</button>
+      </div>
+      <form id="add-book-form">
+        <input type="hidden" id="form-book-id" name="bookId" value="">
+
+        <div class="modal-body" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label class="form-label">Book Title *</label>
+            <input type="text" id="form-book-title" name="title" class="form-control" placeholder="e.g. Design Patterns: Elements of Reusable Object-Oriented Software" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Author(s) *</label>
+            <input type="text" id="form-book-author" name="author" class="form-control" placeholder="e.g. Erich Gamma, Richard Helm" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">ISBN-13 *</label>
+            <input type="text" id="form-book-isbn" name="isbn" class="form-control" placeholder="e.g. 978-0201633610" required>
+            <span class="form-hint">Duplicate ISBNs are strictly blocked.</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Category / Genre *</label>
+            <select id="form-book-category" name="category" class="form-control form-select" required>
+              <option value="Computer Science">Computer Science</option>
+              <option value="Artificial Intelligence">Artificial Intelligence</option>
+              <option value="Literature">Literature</option>
+              <option value="Science Fiction">Science Fiction</option>
+              <option value="Science">Science</option>
+              <option value="History">History</option>
+              <option value="Business">Business</option>
+              <option value="Philosophy">Philosophy</option>
+              <option value="General">General</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Total Quantity (Copies) *</label>
+            <input type="number" id="form-book-quantity" name="quantity" class="form-control" min="1" max="100" value="5" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Publication Year</label>
+            <input type="number" id="form-book-year" name="publicationYear" class="form-control" min="1500" max="2026" value="2024">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Shelf Location</label>
+            <input type="text" id="form-book-shelf" name="shelfLocation" class="form-control" placeholder="e.g. CS-Floor2-A4">
+          </div>
+
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label class="form-label">Cover Image URL</label>
+            <input type="url" id="form-book-cover" name="coverImageUrl" class="form-control" placeholder="https://images.unsplash.com/...">
+          </div>
+
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label class="form-label">Description / Synopsis</label>
+            <textarea id="form-book-desc" name="description" class="form-control" rows="3" placeholder="Brief book summary..."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-modal-close>Cancel</button>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Save Book to Catalog
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- JavaScript Module -->
+  <script type="module" src="../js/admin-controller.js"></script>
+</body>
+</html>
